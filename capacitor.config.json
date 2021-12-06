@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "voice",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}
