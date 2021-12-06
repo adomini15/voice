@@ -1,0 +1,7 @@
+{
+  "name": "voice",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
