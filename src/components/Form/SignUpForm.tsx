@@ -1,11 +1,12 @@
 import {useFormik} from "formik";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
-import {User} from "../../types/User";
-import {authSignUpRequested} from "../../actions/authActions";
 import * as yup from "yup";
 import {IonButton, IonInput, IonItem, IonLabel} from "@ionic/react";
+
 import Message from "../Message/Message";
+import {User} from "../../types/User";
+import {authSignUpRequested} from "../../actions/authActions";
 
 // creating validation schema
 const validationSchema = yup.object().shape({
@@ -19,7 +20,9 @@ const initialValues: User = {
     password: ''
 }
 
-const SignUpForm: React.FC = () => {
+const SignUpForm: React.FC<{
+    history: any
+}> = ({ history }) => {
     // maneging global store
     const dispatch = useDispatch();
     const signUpError = useSelector((state:any) => state.auth.error );
@@ -48,20 +51,33 @@ const SignUpForm: React.FC = () => {
         onSubmit
     });
 
+    // effect occurred when form is submitting
     useEffect(() => {
-        if(signUpError && isSubmitting) {
+        if(signUpError !== undefined) {
             try {
+                // when occurred server error
+                if (signUpError) throw signUpError;
+
+                // when success
+                history.push('/login')
+
+            } catch (error) {
+
+                // when FormatFirebaseError is involved
                 if('field' in signUpError && 'message' in signUpError) {
                     setFieldError(signUpError.field, signUpError.message)
+                } else {
+                    // default treatment
+                    console.log(error);
                 }
-            } catch (error) {
-                console.log(error);
+
             } finally {
+                // restart isSubmitting to false
                setSubmitting(false);
             }
         }
 
-    }, [signUpError, isSubmitting]);
+    }, [signUpError]);
 
     return <form onSubmit={handleSubmit}>
         <IonItem>

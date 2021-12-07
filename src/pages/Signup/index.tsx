@@ -1,9 +1,11 @@
 import {IonContent, IonHeader, IonPage, IonTitle, IonToolbar} from "@ionic/react";
+import { RouteComponentProps } from "react-router"
+
 import SignUpForm from "../../components/Form/SignUpForm";
 
 
 // Login Page
-const Signup: React.FC = () => {
+const Signup: React.FC<RouteComponentProps> = ({ history, match, location }) => {
 
     return <IonPage>
         <IonHeader>
@@ -12,7 +14,7 @@ const Signup: React.FC = () => {
             </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
-           <SignUpForm />
+           <SignUpForm history={history} />
         </IonContent>
     </IonPage>
 }
