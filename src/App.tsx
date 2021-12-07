@@ -21,19 +21,26 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+// Global store provider
+import StoreProvider from "./providers/storeProvider";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 const App: React.FC = () => (
   <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
+    <StoreProvider>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route exact path="/home" component={Home} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={Signup} />
+          <Route exact path="/">
+            <Redirect to="/home" />
+          </Route>
+          <Route />
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </StoreProvider>
   </IonApp>
 );
 
