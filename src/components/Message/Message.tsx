@@ -10,8 +10,9 @@ const icons = {
 const applyStyle = (color: string) => ({
     display: 'flex',
     alignItems: 'center',
-    padding: '0.5rem',
-    gap: '0.5rem',
+    fontSize: "0.875rem",
+    padding: '0.5em',
+    gap: '0.5em',
     color: `var(--ion-color-${color})`,
 })
 
@@ -20,7 +21,6 @@ const Message: React.FC<{
     color: 'success' | 'warning' | 'danger'
 }> = ({ message, color}) => {
 
-    console.log(message)
     return <div style={applyStyle(color)}>
             <IonIcon icon={icons[color]} />
             <IonText>
