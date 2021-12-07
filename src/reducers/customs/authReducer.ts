@@ -21,10 +21,11 @@ export const authReducer: Reducer = (state = initialState, action) => {
         }
 
         case '@auth-signup/success': {
-            return { ...state, loading: false }
+            return { ...state, loading: false, error: null }
         }
 
         case '@auth-signup/failed': {
+            console.log(payload.error);
             return { ...state, error: payload.error, loading: false }
         }
 
