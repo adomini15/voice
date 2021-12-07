@@ -1,8 +1,8 @@
-import {AuthRepository} from "./AuthRepository";
 import {initializeApp} from "firebase/app";
-import { getAuth, Auth, createUserWithEmailAndPassword, UserCredential } from "firebase/auth";
+import { getAuth, Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {firebaseConfig} from "../../.firebaseConfig";
 import {User} from "../../types/User";
+import {AuthRepository} from "./AuthRepository";
 
 export class FirebaseAuthRepository implements AuthRepository {
     private readonly auth: Auth;
@@ -11,9 +11,20 @@ export class FirebaseAuthRepository implements AuthRepository {
         this.auth = getAuth(initializeApp(firebaseConfig));
     }
 
-    public async login() {
+    public getAuthenticatedUser() {
         try {
+            return this.auth.currentUser;
+        } catch (error) {
+            throw error;
+        }
+    }
 
+    public async signin(user:User) {
+        const { email, password } = user;
+
+        try {
+            await signInWithEmailAndPassword(this.auth, email, password);
+            return this.auth.currentUser;
         } catch (error) {
             throw error;
         }
@@ -23,16 +34,20 @@ export class FirebaseAuthRepository implements AuthRepository {
         const { email, password } = user;
 
         try {
-            const userCredential: UserCredential =  await createUserWithEmailAndPassword(this.auth, email, password);
-
-            return userCredential;
-
+            await createUserWithEmailAndPassword(this.auth, email, password);
+            return this.auth.currentUser;
         } catch (error) {
             throw error;
         }
     }
 
     async logout() {
+        try {
+            await signOut(this.auth);
+            return true;
+        } catch (error) {
+            throw error;
+        }
     }
 
 

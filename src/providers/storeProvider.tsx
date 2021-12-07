@@ -3,7 +3,10 @@ import {Provider} from "react-redux";
 import {store} from "../context/redux/store";
 
 // Global store provider
-const StoreProvider: React.FC = ({children}) => {
+const StoreProvider: React.FC<{
+    initDispatch?: any
+}> = ({children}) => {
+
     return <Provider store={store}>
         {children}
     </Provider>

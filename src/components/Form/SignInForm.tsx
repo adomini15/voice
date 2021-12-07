@@ -1,18 +1,12 @@
 import {useFormik} from "formik";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
-import * as yup from "yup";
 import {IonButton, IonInput, IonItem, IonLabel, IonSpinner} from "@ionic/react";
 
 import Message from "../Message/Message";
 import {User} from "../../types/User";
-import {authSignUpRequested} from "../../actions/authActions";
+import {authSignInRequested} from "../../actions/authActions";
 
-// creating validation schema
-const validationSchema = yup.object().shape({
-    email: yup.string().email().required(),
-    password: yup.string().min(6).required(),
-})
 
 // Form initial values
 const initialValues: User = {
@@ -20,18 +14,18 @@ const initialValues: User = {
     password: ''
 }
 
-const SignUpForm: React.FC<{
+const SignInForm: React.FC<{
     history: any
 }> = ({ history }) => {
     // maneging global store
     const dispatch = useDispatch();
-    const signUpError = useSelector((state:any) => state.auth.error );
+    const signInError = useSelector((state:any) => state.auth.error );
     const loading = useSelector((state:any) => state.auth.loading);
 
     // handlers
     const onSubmit = (user: User) => {
         setSubmitting(true)
-        dispatch(authSignUpRequested(user));
+        dispatch(authSignInRequested(user));
     }
 
     // implementing Formik in hook
@@ -48,26 +42,24 @@ const SignUpForm: React.FC<{
         handleBlur
     } = useFormik({
         initialValues,
-        validationSchema,
         onSubmit
     });
 
     // effect occurred when form is submitting
     useEffect(() => {
-
-        if(signUpError !== undefined) {
+        if(signInError !== undefined) {
             try {
                 // when occurred server error
-                if (signUpError) throw signUpError;
+                if (signInError) throw signInError;
 
                 // when success
-                history.push('/signin')
+                history.push('/home')
 
             } catch (error) {
 
                 // when FormatFirebaseError is involved
-                if('field' in signUpError && 'message' in signUpError) {
-                    setFieldError(signUpError.field, signUpError.message)
+                if('field' in signInError && 'message' in signInError) {
+                    setFieldError(signInError.field, signInError.message)
                 } else {
                     // default treatment
                     console.log(error);
@@ -75,21 +67,21 @@ const SignUpForm: React.FC<{
 
             } finally {
                 // restart isSubmitting to false
-               setSubmitting(false);
+                setSubmitting(false);
             }
         }
 
-    }, [signUpError]);
+    }, [signInError]);
 
     return <form onSubmit={handleSubmit}>
         <IonItem>
             <IonLabel position="floating">Email</IonLabel>
             <IonInput type="text"
-                   id="email"
-                   name="email"
-                   onIonChange={handleChange}
-                   onIonBlur={handleBlur}
-                   value={values.email}
+                      id="email"
+                      name="email"
+                      onIonChange={handleChange}
+                      onIonBlur={handleBlur}
+                      value={values.email}
 
             />
         </IonItem>
@@ -121,4 +113,4 @@ const SignUpForm: React.FC<{
     </form>
 }
 
-export default SignUpForm;
+export default SignInForm;

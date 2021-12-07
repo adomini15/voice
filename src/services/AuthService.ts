@@ -11,18 +11,42 @@ export class AuthService {
     public static Instance (authRepository: AuthRepository){
         if(!AuthService._instance) {
             AuthService._instance = new AuthService();
+            AuthService._authRepo = authRepository;
         }
-
-        AuthService._authRepo = authRepository;
 
         return AuthService._instance;
     }
-
-    async signup (user:User) {
+    
+    getAuthenticatedUser ()  {
         try {
-            const res = await AuthService._authRepo.signup(user);
+            return AuthService._authRepo.getAuthenticatedUser();
+        } catch (error) {
+            throw error;
+        }
+    }
 
-            console.log(res);
+    async signup (user:User) : Promise<any> {
+        try {
+            const data = await AuthService._authRepo.signup(user);
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async signin(user:User) : Promise<any> {
+        try {
+            const data = await AuthService._authRepo.signin(user);
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async logout() : Promise<any> {
+        try {
+            const data = await AuthService._authRepo.logout()
+            return data;
         } catch (error) {
             throw error;
         }
