@@ -17,7 +17,7 @@ export const authReducer: Reducer = (state = initialState, action) => {
 
     switch (type) {
         case '@auth-signup/requested': {
-            return { ...state, loading: true }
+            return { ...state, loading: true, error: undefined }
         }
 
         case '@auth-signup/success': {
