@@ -12,8 +12,8 @@ export const FormatFirebaseError: any = {
         message: 'It must be a string with at least six characters.'
     },
     'auth/user-not-found': {
-        field: 'user',
-        message: 'No existing user with provided identifier.'
+        field: 'email',
+        message: 'No existing user.'
     },
     'auth/invalid-display-name': {
         field: 'display-name',
@@ -23,4 +23,8 @@ export const FormatFirebaseError: any = {
         field: 'photo-url',
         message: 'It must be a string URL.'
     },
+    'auth/wrong-password': {
+        field: 'password',
+        message: 'Incorrect Password'
+    }
 }

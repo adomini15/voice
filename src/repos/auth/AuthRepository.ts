@@ -1,7 +1,8 @@
 import {User} from "../../types/User";
 
 export interface AuthRepository {
-    login() : Promise<any>;
+    getAuthenticatedUser() : any
+    signin(user:User) : Promise<any>;
     signup(user: User) : Promise<any>;
     logout(): Promise<any>;
 }

@@ -1,12 +1,12 @@
 import {Reducer} from "redux";
 
 const initialState: {
-    auth: any,
+    user: any,
     success: any,
     loading: boolean,
     error: any
 } = {
-    auth: null,
+    user: null,
     success: null,
     loading: false,
     error: null
@@ -16,21 +16,56 @@ export const authReducer: Reducer = (state = initialState, action) => {
     const { type, payload } = action;
 
     switch (type) {
+        case '@auth-user/requested': {
+            return {...state, loading: true, error: undefined}
+        }
+
+        case '@auth-user/success': {
+            return { ...state, user: action.payload.user, loading: false }
+        }
+
+        case '@auth-user/failed': {
+            return { ...state, error: payload.error, loading: false }
+        }
+
         case '@auth-signup/requested': {
             return { ...state, loading: true, error: undefined }
         }
 
         case '@auth-signup/success': {
-            return { ...state, loading: false, error: null }
+            return { ...state, user: action.payload.user, loading: false}
         }
 
         case '@auth-signup/failed': {
-            console.log(payload.error);
             return { ...state, error: payload.error, loading: false }
         }
 
+        case '@auth-sign-in/requested': {
+            return { ...state, loading: true, error: undefined }
+        }
+
+        case '@auth-sign-in/success': {
+            return { ...state, user: action.payload.user, loading: false, error: null }
+        }
+
+        case '@auth-sign-in/failed': {
+            return  {...state, loading: false, error: action.payload.error }
+        }
+
+        case '@auth-logout/requested': {
+            return {...state, loading: true, error: undefined}
+        }
+
+        case '@auth-logout/success': {
+            return {...state, loading: false, error: null}
+        }
+
+        case '@auth-logout/failed': {
+            return {...state, loading: false, error: action.payload.error}
+        }
+
         default: {
-            return 'Not Action Recognize'
+            return 'Not Action Recognized'
         }
     }
 }
