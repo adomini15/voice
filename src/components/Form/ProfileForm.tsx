@@ -7,6 +7,7 @@ import Message from "../Message/Message";
 import {authUpdateProfileRequested} from "../../actions/authActions";
 import ChooseImage from "../File/ChooseImage";
 import {Profile} from "../../types/Profile";
+import {convertPathToBlob} from "../../utils/upload/convertPathToBlob";
 
 const initialValues:Profile = {}
 
@@ -34,6 +35,7 @@ const ProfileForm: React.FC<{
     }
 
     const onCapturePhoto = (photo: Blob) => {
+        setFieldValue('photoURL', URL.createObjectURL(photo));
         setCapturedPhoto(photo);
     }
 
@@ -52,6 +54,7 @@ const ProfileForm: React.FC<{
         initialValues,
         onSubmit
     });
+
 
     // when charge user
     useEffect(() => {
@@ -119,7 +122,12 @@ const ProfileForm: React.FC<{
             <Message message={errors.displayName!} color="danger" />
         }
         <div className="ion-padding">
-            <IonButton type="submit" expand="full" disabled={!isValid || isSubmitting}>{ loading ? <IonSpinner name="crescent"/> : 'Submit'}</IonButton>
+            <IonButton type="submit"
+                       fill="outline"
+                       expand="full"
+                       disabled={!isValid || isSubmitting}>
+                { loading ? <IonSpinner name="crescent"/> : 'Edit'}
+            </IonButton>
         </div>
     </form>
 
