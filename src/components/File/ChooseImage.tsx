@@ -17,10 +17,8 @@ const ChooseImage: React.FC<{
     }, [photo]);
 
     return <div className="ion-padding">
-        <IonButton color="dark" fill={ photo ? 'solid' : 'outline'} onClick={takePhoto}>
-            {
-                photo ? <><IonIcon icon={imageOutline} style={{ marginRight: "0.5rem" }} /> Edit Image</> : 'Select Image'
-            }
+        <IonButton fill="outline"  size="small" onClick={takePhoto}>
+           <IonIcon icon={imageOutline} style={{ marginRight: "0.5rem" }} /> Choose Image
         </IonButton>
     </div>
 }

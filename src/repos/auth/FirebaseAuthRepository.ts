@@ -1,5 +1,5 @@
 import {initializeApp} from "firebase/app";
-import { getAuth, Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, Auth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {firebaseConfig} from "../../.firebaseConfig";
 import {User} from "../../types/User";
 import {AuthRepository} from "./AuthRepository";
@@ -50,9 +50,11 @@ export class FirebaseAuthRepository implements AuthRepository {
         }
     }
 
-    async updateProfile(data: any) {
+    async updateProfile(data: { displayName?: string, photoURL?: string }) {
         try {
-
+            const { displayName, photoURL } = data;
+            await updateProfile(this.auth.currentUser!, { displayName, photoURL })
+            return true;
         } catch (error) {
             throw error;
         }

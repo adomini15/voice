@@ -36,10 +36,8 @@ const SignInForm: React.FC<{
         setSubmitting,
         isSubmitting,
         isValid,
-        touched,
         handleSubmit,
         handleChange,
-        handleBlur
     } = useFormik({
         initialValues,
         onSubmit
@@ -80,13 +78,12 @@ const SignInForm: React.FC<{
                       id="email"
                       name="email"
                       onIonChange={handleChange}
-                      onIonBlur={handleBlur}
                       value={values.email}
 
             />
         </IonItem>
         {
-            errors.email && touched.email &&
+            errors.email &&
             <Message message={errors.email!} color="danger" />
         }
 
@@ -96,13 +93,12 @@ const SignInForm: React.FC<{
                       id="password"
                       name="password"
                       onIonChange={handleChange}
-                      onIonBlur={handleBlur}
                       value={values.password}
             />
 
         </IonItem>
         {
-            errors.password && touched.password &&
+            errors.password &&
             <Message message={errors.password!} color="danger" />
         }
 

@@ -27,8 +27,7 @@ export class AuthService {
 
     async signup (user:User) : Promise<any> {
         try {
-            const data = await AuthService._authRepo.signup(user);
-            return data;
+            return await AuthService._authRepo.signup(user);
         } catch (error) {
             throw error;
         }
@@ -36,8 +35,7 @@ export class AuthService {
 
     async signin(user:User) : Promise<any> {
         try {
-            const data = await AuthService._authRepo.signin(user);
-            return data;
+            return  await AuthService._authRepo.signin(user);
         } catch (error) {
             throw error;
         }
@@ -45,8 +43,15 @@ export class AuthService {
 
     async logout() : Promise<any> {
         try {
-            const data = await AuthService._authRepo.logout()
-            return data;
+            return await AuthService._authRepo.logout()
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async updateProfile(data: any) : Promise<any>{
+        try {
+            return await AuthService._authRepo.updateProfile(data)
         } catch (error) {
             throw error;
         }
