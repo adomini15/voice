@@ -9,19 +9,20 @@ import {
     authSignInFailed,
     authSignInSuccess,
     authSignUpFailed,
-    authSignUpSuccess, authUserFailed,
+    authSignUpSuccess, authUpdateProfileFailed, authUpdateProfileSuccess, authUserFailed,
     authUserSuccess
 } from "../../actions/authActions";
 import {FormatFirebaseError} from "../../utils/errors/FormatFirebaseError";
+import {FirebaseStorageHelper} from "../../utils/upload/FirebaseStorageHelper";
 
 // AuthService launched with specific auth repository
 const authService = AuthService.Instance(new FirebaseAuthRepository())
 
 function* getAuthUser () : any {
     try {
-        const authUser = yield call(authService.getAuthenticatedUser)
+        const feedback = yield call(authService.getAuthenticatedUser)
 
-        yield put(authUserSuccess(authUser));
+        yield put(authUserSuccess(feedback));
     } catch (error: any) {
         if (error instanceof FirebaseError) {
             yield put(authUserFailed(FormatFirebaseError[error.code]))
@@ -35,9 +36,9 @@ function* getAuthUser () : any {
 function* OnSignIn (action:any): any {
     try {
         const {user} = action.payload;
-        const authUser = yield call(authService.signin, user)
+        const feedback = yield call(authService.signin, user)
 
-        yield put(authSignInSuccess(authUser));
+        yield put(authSignInSuccess(feedback));
     } catch (error: any) {
         if (error instanceof FirebaseError) {
             yield put(authSignInFailed(FormatFirebaseError[error.code]))
@@ -51,12 +52,34 @@ function* OnSignIn (action:any): any {
 function* OnSignUp(action: any): any {
     try {
         const { user } = action.payload;
-        const authUser = yield call(authService.signup, user);
+        const feedback = yield call(authService.signup, user);
 
-        yield put(authSignUpSuccess(authUser))
+        yield put(authSignUpSuccess(feedback))
     } catch (error: any) {
         if(error instanceof FirebaseError) {
             yield put(authSignUpFailed(FormatFirebaseError[error.code]));
+            return;
+        }
+
+        throw error;
+    }
+}
+
+function* OnUpdateProfile (action:any) : any {
+    try {
+        const { data } = action.payload;
+        let imageURL;
+
+        if(data.photo instanceof Blob) {
+            imageURL = yield call(FirebaseStorageHelper.uploadImage, data.photo, data.filename)
+        }
+        
+        const feedback = yield call(authService.updateProfile, { photoURL: imageURL, displayName: data.displayName  })
+        yield put(authUpdateProfileSuccess(feedback))
+
+    } catch (error) {
+        if(error instanceof FirebaseError) {
+            yield put(authUpdateProfileFailed(FormatFirebaseError[error.code]));
             return;
         }
 
@@ -68,4 +91,5 @@ export function* watcherAuthSaga() {
     yield takeEvery('@auth-user/requested', getAuthUser)
     yield takeEvery('@auth-sign-in/requested', OnSignIn)
     yield takeEvery('@auth-signup/requested', OnSignUp);
+    yield takeEvery('@auth-update-profile/requested', OnUpdateProfile)
 }

@@ -31,9 +31,10 @@ import {authUserRequested} from "./actions/authActions";
 import {store} from "./context/redux/store";
 import { onAuthStateChanged } from 'firebase/auth';
 import {firebaseConfig} from "./.firebaseConfig";
+import Profile from "./pages/Profile";
 
 // when app init
-onAuthStateChanged( getAuth(initializeApp(firebaseConfig)) , () => {
+onAuthStateChanged( getAuth(initializeApp(firebaseConfig)) , (user) => {
   store.dispatch(authUserRequested())
 })
 
@@ -46,6 +47,7 @@ const App: React.FC = () => (
           <Route exact path="/home" component={Home} />
           <Route exact path="/signin" component={SignIn} />
           <Route exact path="/signup" component={Signup} />
+          <Route exact path="/profile" component={Profile} />
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>

@@ -81,3 +81,25 @@ export const authLogoutFailed = (error: any) => ({
         error
     }
 })
+
+// auth update profile actions
+export const authUpdateProfileRequested = (data: any) => ({
+    type: '@auth-update-profile/requested',
+    payload: {
+        data
+    }
+})
+
+export const authUpdateProfileSuccess = (data: any) => ({
+    type: '@auth-update-profile/success',
+    payload: {
+        data
+    }
+})
+
+export const authUpdateProfileFailed = (error: any) => ({
+    type: '@auth-update-profile/failed',
+    payload: {
+        error
+    }
+})

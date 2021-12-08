@@ -26,5 +26,9 @@ export const FormatFirebaseError: any = {
     'auth/wrong-password': {
         field: 'password',
         message: 'Incorrect Password'
+    },
+    'auth/user-token-expired': {
+        field: 'token',
+        message: 'User session expired'
     }
 }

@@ -64,6 +64,18 @@ export const authReducer: Reducer = (state = initialState, action) => {
             return {...state, loading: false, error: action.payload.error}
         }
 
+        case '@auth-update-profile/requested': {
+            return  {...state, loading: true, error: undefined}
+        }
+
+        case '@auth-update-profile/success': {
+            return {...state, loading: false, error: null}
+        }
+
+        case '@auth-update-profile/failed': {
+            return {...state, loading: false, error: action.payload.error}
+        }
+
         default: {
             return 'Not Action Recognized'
         }
