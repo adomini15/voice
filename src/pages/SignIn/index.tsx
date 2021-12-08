@@ -1,4 +1,14 @@
-import {IonButton, IonContent, IonHeader, IonItem, IonLabel, IonPage, IonTitle, IonToolbar} from "@ionic/react";
+import {
+    IonButton,
+    IonContent,
+    IonHeader,
+    IonItem,
+    IonLabel,
+    IonPage,
+    IonRouterLink,
+    IonTitle,
+    IonToolbar
+} from "@ionic/react";
 import { RouteComponentProps } from "react-router";
 
 // style file
@@ -16,7 +26,8 @@ const SignIn: React.FC<RouteComponentProps> = ({ history, match,location }) => {
             </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
-                <SignInForm history={history} />
+            <SignInForm history={history} />
+            <IonRouterLink  routerLink="/signup" className="ion-padding" style={{ fontSize: '0.875rem' }}>Do you don't have a user account?</IonRouterLink>
         </IonContent>
     </IonPage>
 }

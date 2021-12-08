@@ -50,6 +50,12 @@ export class FirebaseAuthRepository implements AuthRepository {
         }
     }
 
+    async updateProfile(data: any) {
+        try {
 
+        } catch (error) {
+            throw error;
+        }
+    }
 
 }
