@@ -1,8 +1,10 @@
+// external
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import './Home.css';
 import {useSelector} from "react-redux";
-import {stat} from "fs";
-import ChooseImage from "../components/File/ChooseImage";
+
+// internal
+import './Home.css';
+import Map from "../components/Map";
 
 const Home: React.FC = () => {
   const user = useSelector((state:any) => state.auth.user)
@@ -15,7 +17,7 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-          <ChooseImage onChange={(photo:any) => console.log(photo.size)} />
+          <Map />
       </IonContent>
     </IonPage>
   );

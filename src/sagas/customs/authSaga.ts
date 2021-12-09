@@ -18,7 +18,7 @@ import {FirebaseStorageHelper} from "../../utils/upload/FirebaseStorageHelper";
 // AuthService launched with specific auth repository
 const authService = AuthService.Instance(new FirebaseAuthRepository())
 
-function* getAuthUser () : any {
+function* OnGetAuthenticatedUser () : any {
     try {
         const feedback = yield call(authService.getAuthenticatedUser)
 
@@ -88,7 +88,7 @@ function* OnUpdateProfile (action:any) : any {
 }
 
 export function* watcherAuthSaga() {
-    yield takeEvery('@auth-user/requested', getAuthUser)
+    yield takeEvery('@auth-user/requested', OnGetAuthenticatedUser)
     yield takeEvery('@auth-sign-in/requested', OnSignIn)
     yield takeEvery('@auth-signup/requested', OnSignUp);
     yield takeEvery('@auth-update-profile/requested', OnUpdateProfile)
