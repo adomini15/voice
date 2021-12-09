@@ -1,26 +1,22 @@
 import {Coordinates} from "../../types/Coordinates";
 
-// google.maps
-import TravelMode = google.maps.TravelMode;
-import LatLng = google.maps.LatLng;
-import DistanceMatrixService = google.maps.DistanceMatrixService;
 
 export class GoogleMapsHelper {
 
     private constructor() {}
 
-    static async getDistance(origin: Coordinates, destination: Coordinates, travelMode: TravelMode = TravelMode.DRIVING) {
+    static async getDistance(origin: Coordinates, destination: Coordinates, travelMode: google.maps.TravelMode = google.maps.TravelMode.DRIVING) {
         try {
-            const distanceMService = new DistanceMatrixService()
+            const distanceMService = new google.maps.DistanceMatrixService()
 
             const feedback = await distanceMService.getDistanceMatrix({
                 origins: [
-                    new LatLng(origin.latitude, origin.longitude)
+                    new google.maps.LatLng(origin.latitude, origin.longitude)
                 ],
                 destinations: [
-                    new LatLng(destination.latitude, destination.longitude),
+                    new google.maps.LatLng(destination.latitude, destination.longitude),
                 ],
-                travelMode: TravelMode.DRIVING
+                travelMode: google.maps.TravelMode.DRIVING
             })
 
             return {

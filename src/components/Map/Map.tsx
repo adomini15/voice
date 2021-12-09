@@ -1,13 +1,12 @@
 // external
 import { withProps, compose } from "recompose";
 import { withGoogleMap, withScriptjs, GoogleMap, Marker } from "react-google-maps"
-import MapTypeId = google.maps.MapTypeId;
-import MapMouseEvent = google.maps.MapMouseEvent;
+
 
 // internal
-import {useGeo} from "../hooks/useGeo";
+import {useGeo} from "../../hooks/useGeo";
 import {useEffect} from "react";
-import {googleMapsConfig} from "../googleMapsConfig";
+import {googleMapsConfig} from "../../.googleMapsConfig";
 import {IonSpinner} from "@ionic/react";
 
 const Map: React.FC = (props) => {
@@ -25,7 +24,7 @@ const Map: React.FC = (props) => {
     }, [])
 
     // handlers
-    const onMapMouseChange = ({latLng}: MapMouseEvent) => {
+    const onMapMouseChange = ({latLng}: google.maps.MapMouseEvent) => {
         if (latLng) {
             setCoordinates({
                 latitude: latLng.lat(),
@@ -45,7 +44,7 @@ const Map: React.FC = (props) => {
                     lng: coordinates.longitude
                 }}
                 onClick={onMapMouseChange}
-                defaultMapTypeId={ MapTypeId.SATELLITE }
+                defaultMapTypeId={ google.maps.MapTypeId.SATELLITE }
             >
                 <Marker position={{
                             lat: coordinates.latitude,

@@ -4,7 +4,8 @@ import {useSelector} from "react-redux";
 
 // internal
 import './Home.css';
-import Map from "../components/Map";
+import Map from "../components/Map/Map";
+import TextToSpeechPlayer from "../components/speaker/TextToSpeechPlayer";
 
 const Home: React.FC = () => {
   const user = useSelector((state:any) => state.auth.user)
@@ -17,6 +18,7 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+          <TextToSpeechPlayer size={50} text="Evento:Fiesta en la casa de José. Descripción: Fiesta de cumpleaños de jose. Distancia: 1 metro. Tiempo de llegada: 1 minuto" lang="es-US" />
           <Map />
       </IonContent>
     </IonPage>
