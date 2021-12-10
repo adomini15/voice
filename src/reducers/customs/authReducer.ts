@@ -33,7 +33,7 @@ export const authReducer: Reducer = (state = initialState, action) => {
         }
 
         case '@auth-signup/success': {
-            return { ...state, user: action.payload.user, loading: false}
+            return { ...state, user: action.payload.user, loading: false, error: null}
         }
 
         case '@auth-signup/failed': {
@@ -77,7 +77,7 @@ export const authReducer: Reducer = (state = initialState, action) => {
         }
 
         default: {
-            return 'Not Action Recognized'
+             return 'Not Action Recognized'
         }
     }
 }
