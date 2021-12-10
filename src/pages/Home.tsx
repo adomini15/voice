@@ -1,16 +1,31 @@
 // external
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import {
+    IonButton,
+    IonContent,
+    IonHeader,
+    IonIcon,
+    IonInput,
+    IonItem,
+    IonPage,
+    IonTitle,
+    IonToolbar
+} from '@ionic/react';
 import {useSelector} from "react-redux";
 
 // internal
 import './Home.css';
 import Map from "../components/Map/Map";
 import TextToSpeechPlayer from "../components/speaker/TextToSpeechPlayer";
+import SpeechToTextRecorder from "../components/speaker/SpeechToTextRecorder";
+import SelectText from "../components/diverse/SelectText";
+
+import {useState} from "react";
 
 const Home: React.FC = () => {
   const user = useSelector((state:any) => state.auth.user)
+    const [results, setResults] = useState<string[]>([]);
 
-  return (
+    return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
@@ -18,8 +33,18 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-          <TextToSpeechPlayer size={50} text="Evento:Fiesta en la casa de José. Descripción: Fiesta de cumpleaños de jose. Distancia: 1 metro. Tiempo de llegada: 1 minuto" lang="es-US" />
-          <Map />
+          {/*<TextToSpeechPlayer size={25} text="Fiesta en la casa de José. Descripción: Fiesta de cumpleaños de jose. Distancia: 1 metro. Tiempo de llegada: 1 minuto" lang="es-US" />*/}
+          {/*<Map />*/}
+
+          <IonItem>
+              <IonInput type="text" placeholder="Colocar tu texto"/>
+              <div item-right>
+                  <SpeechToTextRecorder onChange={(results:any) => { setResults(results)  }} ></SpeechToTextRecorder>
+              </div>
+          </IonItem>
+
+          <SelectText onChange={(selectedText:any) => console.log(selectedText)} elements={results} />
+
       </IonContent>
     </IonPage>
   );
