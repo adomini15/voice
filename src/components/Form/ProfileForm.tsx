@@ -71,7 +71,7 @@ const ProfileForm: React.FC<{
                 if (profileError) throw profileError;
 
                 // when success
-                history.push('/')
+                // history.push('/')
 
             } catch (error) {
 
