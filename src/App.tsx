@@ -3,7 +3,6 @@ import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import {initializeApp} from "firebase/app";
 import {getAuth} from "firebase/auth";
-import Home from './pages/Home';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -25,18 +24,19 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 // Global store provider
 import StoreProvider from "./providers/storeProvider";
+import {store} from "./context/redux/store";
+import { onAuthStateChanged } from 'firebase/auth';
+
 import SignIn from "./pages/SignIn";
 import Signup from "./pages/Signup";
 import {authUserRequested} from "./actions/authActions";
-import {store} from "./context/redux/store";
-import { onAuthStateChanged } from 'firebase/auth';
 import {firebaseConfig} from "./.firebaseConfig";
-import Profile from "./pages/Profile";
-import CreateEvent from "./pages/CreateEvent/CreateEvent";
-import EditEvent from "./pages/EditEvent/EditEvent";
+import Dashboard from "./pages/Dashboard";
 
 // when app init
-onAuthStateChanged( getAuth(initializeApp(firebaseConfig)) , () => {
+onAuthStateChanged( getAuth(initializeApp(firebaseConfig)) , (user) => {
+  console.log(user);
+
   store.dispatch(authUserRequested())
 })
 
@@ -46,16 +46,15 @@ const App: React.FC = () => (
     <StoreProvider>
       <IonReactRouter>
         <IonRouterOutlet>
-          <Route exact path="/home" component={Home} />
+          {/* public */}
           <Route exact path="/signin" component={SignIn} />
           <Route exact path="/signup" component={Signup} />
-          <Route exact path="/profile" component={Profile} />
-          <Route exact path="/events/create" component={CreateEvent} />
-          <Route path="/events/:id/edit" component={EditEvent} />
+
+          {/* private */}
+          <Route path="/dashboard" component={Dashboard}  />
           <Route exact path="/">
-            <Redirect to="/events/create" />
+            <Redirect to="/dashboard" />
           </Route>
-          <Route />
         </IonRouterOutlet>
       </IonReactRouter>
     </StoreProvider>
