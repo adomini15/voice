@@ -1,5 +1,24 @@
 import {TEvent} from "../types/TEvent";
 
+// event all action
+export const eventAllRequest = () => ({
+    type: '@event-all/requested'
+})
+
+export const eventAllSuccess = (events: TEvent[]) => ({
+    type: '@event-all/success',
+    payload: {
+        events
+    }
+})
+
+export const eventAllFailed = (error: any) => ({
+    type: '@event-all/failed',
+    payload: {
+        error
+    }
+})
+
 // event create action
 export const eventCreateRequested  = (event: TEvent) => ({
     type: '@event-create/requested',

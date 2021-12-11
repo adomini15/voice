@@ -1,5 +1,5 @@
 // external
-import { withProps, compose } from "recompose";
+import {compose, withProps} from "recompose";
 import { withGoogleMap, withScriptjs, GoogleMap, Marker } from "react-google-maps"
 
 
@@ -8,47 +8,41 @@ import {useGeo} from "../../hooks/useGeo";
 import {useEffect} from "react";
 import {googleMapsConfig} from "../../.googleMapsConfig";
 import {IonSpinner} from "@ionic/react";
+import {Coordinates} from "../../types/Coordinates";
 
-const Map: React.FC = (props) => {
-    const { coordinates, takeCoordinates, setCoordinates } = useGeo();
-
-    // component mounted
-    useEffect(() => {
-        (async function (){
-           try {
-               await takeCoordinates();
-           } catch (error) {
-               console.log(error)
-           }
-        })();
-    }, [])
+const Map:React.FC<{
+    defaultCoordinates: Coordinates,
+    onChange: Function
+}> = ({ defaultCoordinates, onChange }) => {
 
     // handlers
-    const onMapMouseChange = ({latLng}: google.maps.MapMouseEvent) => {
+    const onClick = ({latLng}: google.maps.MapMouseEvent) => {
         if (latLng) {
-            setCoordinates({
+            const coordinates:Coordinates = {
                 latitude: latLng.lat(),
                 longitude: latLng.lng()
-            })
+            }
+
+            onChange(coordinates)
         }
 
     }
 
     return <div>
         {
-            coordinates &&
+            defaultCoordinates &&
             <GoogleMap
                 defaultZoom={100}
                 defaultCenter={{
-                    lat: coordinates.latitude,
-                    lng: coordinates.longitude
+                    lat: defaultCoordinates.latitude,
+                    lng: defaultCoordinates.longitude
                 }}
-                onClick={onMapMouseChange}
+                onClick={onClick}
                 defaultMapTypeId={ google.maps.MapTypeId.SATELLITE }
             >
                 <Marker position={{
-                            lat: coordinates.latitude,
-                            lng: coordinates.longitude
+                            lat: defaultCoordinates.latitude,
+                            lng: defaultCoordinates.longitude
                         }}
 
                 >
@@ -59,12 +53,9 @@ const Map: React.FC = (props) => {
     </div>
 }
 
-export default compose(
-    withProps({
+export default withProps({
         googleMapURL: googleMapsConfig.URL,
         containerElement: <div style={{ height: '400px' }}></div>,
         mapElement: <div style={{ height: '100%'}}></div>,
-        loadingElement: <IonSpinner name="crescent" />
-    }),
-    withScriptjs,
-    withGoogleMap)(Map);
+        loadingElement: <IonSpinner name="crescent" />,
+    })(withScriptjs(withGoogleMap(Map)));

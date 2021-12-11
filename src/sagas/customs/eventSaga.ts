@@ -11,6 +11,23 @@ import {TEvent} from "../../types/TEvent";
 
 const eventService = EventService.Instance(new FirebaseEventRepository());
 
+function* OnAllEvent(action: any) : any {
+    try {
+
+        const feedback = yield call(eventService.getAll);
+
+        yield put(eventCreateSuccess(feedback));
+
+    } catch (error) {
+        if (error instanceof FirebaseError) {
+            yield put(eventCreateFailed(FormatFirebaseError[error.code]))
+            return;
+        }
+
+        throw error;
+    }
+}
+
 function* OnCreateEvent (action: any) : any {
     try {
         const newEvent: TEvent = action.payload.event as TEvent;

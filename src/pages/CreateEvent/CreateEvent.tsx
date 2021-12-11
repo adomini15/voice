@@ -1,19 +1,61 @@
 // external
-import {IonContent, IonHeader, IonInput, IonItem, IonPage, IonTitle, IonToolbar} from "@ionic/react";
-
+import {IonContent, IonHeader, IonPage, IonTitle, IonToolbar} from "@ionic/react";
+import { RouteComponentProps } from "react-router"
 // internal
-import SpeechToTextRecorder from "../../components/speaker/SpeechToTextRecorder";
-import SelectText from "../../components/diverse/SelectText";
+import EventForm from "../../components/Form/EventForm";
+import {eventCreateRequested} from "../../actions/eventActions";
+import {TEvent} from "../../types/TEvent";
+import {useEffect, useState} from "react";
+import {useGeo} from "../../hooks/useGeo";
 import {useSelector} from "react-redux";
-import {useState} from "react";
 
-const CreateEvent: React.FC = () => {
-    // maneging global store
-    const authUser = useSelector((state:any) => state.auth.user)
+const initialValues: TEvent = {
+    title: '',
+    description: '',
+    arrival_time: new Date().toISOString(),
+    coordinates: {
+        longitude: 0,
+        latitude:0
+    },
+    user_id: ''
+}
+
+const CreateEvent: React.FC<RouteComponentProps> = ({ history, match, location }) => {
+    // geolocation
+    const { coordinates, permissionStatus, takeCoordinates, takePermissions } = useGeo();
+
+    // global store
+    const authUser = useSelector((state:any) => state.auth.user);
 
     // local states
-    const [results, setResults] = useState<string[]>([]);
+    const [event, setEvent] = useState<TEvent | null>(null)
 
+    // for test
+    // const [authUser, setAuthUser] = useState({
+    //     uid: 'blablablabla'
+    // })
+
+    // when user be available
+    useEffect(() => {
+            (async function() {
+                try {
+                    await takePermissions();
+                    await takeCoordinates();
+                } catch (error:any) {
+                    console.log(error)
+                }
+            })();
+
+    }, [])
+
+
+    useEffect(() => {
+        if (coordinates && permissionStatus == 'ACCEPTED' && authUser) {
+            setEvent({ ...initialValues, coordinates, user_id: authUser.uid })
+        }
+    }, [coordinates, permissionStatus, authUser])
+
+    // handlers
     return <IonPage>
         <IonHeader>
             <IonToolbar>
@@ -22,15 +64,9 @@ const CreateEvent: React.FC = () => {
         </IonHeader>
 
         <IonContent fullscreen>
-
-            {/*<IonItem>*/}
-            {/*    <IonInput type="text" placeholder="Colocar tu texto"/>*/}
-            {/*    <div item-right>*/}
-            {/*        <SpeechToTextRecorder onChange={(results:any) => { setResults(results)  }} ></SpeechToTextRecorder>*/}
-            {/*    </div>*/}
-            {/*</IonItem>*/}
-            {/*<SelectText onChange={(selectedText:any) => console.log(selectedText)} elements={results} />*/}
+            { event != null && <EventForm history={history} initialValues={ event } eventDispatchAction={ eventCreateRequested } /> }
         </IonContent>
+
     </IonPage>
 }
 

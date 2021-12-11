@@ -1,6 +1,6 @@
 // external
 import { initializeApp } from "firebase/app"
-import { getFirestore, collection, getDocs, addDoc } from  "firebase/firestore"
+import { getFirestore, collection, doc, getDocs, addDoc, getDoc, updateDoc } from  "firebase/firestore"
 
 // internal
 import {EventRepository} from "./EventRepository";
@@ -16,11 +16,22 @@ export class FirebaseEventRepository implements EventRepository{
 
     async getAll(): Promise<TEvent[]> {
         try {
-            const feedback = await getDocs(this.eventCollection);
+            const events: TEvent[] = [];
+            const querySnapshot = await getDocs(this.eventCollection);
 
-            console.log(feedback);
+            // map events result
+            querySnapshot.forEach((feedback) => {
+                events.push({
+                    id: feedback.id,
+                    title: feedback.get('title'),
+                    description: feedback.get('description'),
+                    arrival_time: feedback.get('arrival_time'),
+                    coordinates: feedback.get('coordinates'),
+                    user_id: feedback.get('user_id'),
+                })
+            })
 
-            return [] as TEvent[];
+            return events;
         } catch (error) {
             throw error;
         }
@@ -28,11 +39,45 @@ export class FirebaseEventRepository implements EventRepository{
 
     async create(event: TEvent): Promise<TEvent> {
         try {
-            const feedback = await addDoc(this.eventCollection, event)
+            const feedback = await getDoc(await addDoc(this.eventCollection, event));
 
-            console.log(feedback);
+            return {
+                id: feedback.id,
+                title: feedback.get('title'),
+                description: feedback.get('description'),
+                arrival_time: feedback.get('arrival_time'),
+                coordinates: feedback.get('coordinates'),
+                user_id: feedback.get('user_id'),
+            };
 
-            return {} as TEvent;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+    async update(event: TEvent): Promise<TEvent> {
+        try {
+            const docRef = await doc(this.eventCollection, event.id);
+
+            await updateDoc(docRef, {
+                title: event.title,
+                description: event.description,
+                arrival_time: event.arrival_time,
+                coordinates: event.coordinates,
+            })
+
+            const feedback = await getDoc(docRef);
+
+            return {
+                id: feedback.id,
+                title: feedback.get('title'),
+                description: feedback.get('description'),
+                arrival_time: feedback.get('arrival_time'),
+                coordinates: feedback.get('coordinates'),
+                user_id: feedback.get('user_id'),
+            };
+
         } catch (error) {
             throw error;
         }
@@ -42,15 +87,6 @@ export class FirebaseEventRepository implements EventRepository{
         try {
 
             return 0;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async update(event: TEvent): Promise<TEvent> {
-        try {
-
-             return {} as TEvent;
         } catch (error) {
             throw error;
         }

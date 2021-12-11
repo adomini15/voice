@@ -18,7 +18,7 @@ export class EventService {
 
     async getAll() {
         try {
-            await EventService._eventRepo.getAll()
+            return  await EventService._eventRepo.getAll()
         } catch (error) {
             throw error;
         }
@@ -26,8 +26,7 @@ export class EventService {
 
     async create(event: TEvent) {
         try {
-            await EventService._eventRepo.create(event);
-
+            return  await EventService._eventRepo.create(event);
         } catch (error) {
             throw error;
         }
@@ -35,7 +34,7 @@ export class EventService {
 
     async update(event: TEvent) {
         try {
-            await EventService._eventRepo.update(event);
+            return await EventService._eventRepo.update(event);
         } catch (error) {
             throw error;
         }
@@ -43,7 +42,7 @@ export class EventService {
 
     async delete(id:number) {
         try {
-            await EventService._eventRepo.delete(id);
+           return  await EventService._eventRepo.delete(id);
         } catch (error) {
             throw error;
         }
