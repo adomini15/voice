@@ -33,6 +33,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import {firebaseConfig} from "./.firebaseConfig";
 import Profile from "./pages/Profile";
 import CreateEvent from "./pages/CreateEvent/CreateEvent";
+import EditEvent from "./pages/EditEvent/EditEvent";
 
 // when app init
 onAuthStateChanged( getAuth(initializeApp(firebaseConfig)) , () => {
@@ -49,9 +50,10 @@ const App: React.FC = () => (
           <Route exact path="/signin" component={SignIn} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/profile" component={Profile} />
-          <Route exact path="/create" component={CreateEvent} />
+          <Route exact path="/events/create" component={CreateEvent} />
+          <Route path="/events/:id/edit" component={EditEvent} />
           <Route exact path="/">
-            <Redirect to="/home" />
+            <Redirect to="/events/create" />
           </Route>
           <Route />
         </IonRouterOutlet>

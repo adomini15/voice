@@ -5,6 +5,6 @@ export type TEvent = {
     title: string,
     description?:string,
     coordinates: Coordinates,
-    arrival_time:Date,
+    arrival_time:string,
     user_id: string
 }

@@ -10,11 +10,24 @@ const initialState: {
     events: [],
     success: null,
     loading: false,
-    error: null
+    error: undefined
 }
 
 export const eventReducer:Reducer = (state = initialState, action) => {
     switch (action.type) {
+        // event all action
+        case '@event-all/requested': {
+            return { ...state, error: undefined, loading: true }
+        }
+
+        case '@event-all/success': {
+            return { ...state, events: action.payload.events,  loading: false, error: null }
+        }
+
+        case '@event-all/failed': {
+            return { ...state, error: action.payload.error, loading: false }
+        }
+
         // create actions
         case '@event-create/requested': {
             return { ...state, error: undefined, loading: true }
@@ -63,7 +76,7 @@ export const eventReducer:Reducer = (state = initialState, action) => {
         }
 
         default: {
-            return 'Not Action Recognized'
+            return { ...state }
         }
     }
 }

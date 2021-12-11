@@ -23,8 +23,9 @@ const initialValues: User = {
 const SignUpForm: React.FC<{
     history: any
 }> = ({ history }) => {
-    // maneging global store
     const dispatch = useDispatch();
+
+    // maneging global store
     const signUpError = useSelector((state:any) => state.auth.error );
     const loading = useSelector((state:any) => state.auth.loading);
 

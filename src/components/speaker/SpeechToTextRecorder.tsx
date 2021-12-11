@@ -10,7 +10,7 @@ import {useEffect, useState} from "react";
 import { mic, micOff } from 'ionicons/icons';
 
 import exportOnlyNativePlatform from "../../utils/rendering/exportOnlyNativePlatform";
-import {IonIcon} from "@ionic/react";
+import {IonIcon, IonSpinner} from "@ionic/react";
 
 const SpeechToTextRecorder: React.FC<{
     onChange: Function
@@ -18,8 +18,11 @@ const SpeechToTextRecorder: React.FC<{
     // creating a new subscription
     let speechToTextSub:Subscription;
 
-    // manage states
+    // managing custom hooks
     const { isSpeechSupported, hasPermission, permissionStatus, listenForSpeech, takePermission, stopListening } = useSpeechToText('es-ES', 'Titule el Evento');
+
+    // local state
+    const [loading, setLoading] = useState(false);
 
     // when component be mounted and unmounted
     useEffect(() => {
@@ -33,7 +36,9 @@ const SpeechToTextRecorder: React.FC<{
 
     // handlers
     const onRecord = async () => {
+        setLoading(true);
         speechToTextSub = listenForSpeech().subscribe((results) => {
+            setLoading(false);
             onChange(results)
          });
     }
@@ -42,15 +47,17 @@ const SpeechToTextRecorder: React.FC<{
 
     return <div>
         {
-            isSpeechSupported && (hasPermission ?
-                <IonIcon onClick={onRecord}
-                         icon={mic}
-                />
-                :
-                <IonIcon  onClick={ takePermission }
-                          icon={micOff}
-                          color={ permissionStatus == 'DENIED' ? 'danger' : 'dark' }
-                />
+            isSpeechSupported && ( loading ?
+                    <IonSpinner name="crescent" style={{ height:"20px" }}/>
+                    : hasPermission ?
+                    <IonIcon onClick={onRecord}
+                             icon={mic}
+                    />
+                    :
+                    <IonIcon  onClick={ takePermission }
+                              icon={micOff}
+                              color={ permissionStatus == 'DENIED' ? 'danger' : 'dark' }
+                    />
             )
         }
 

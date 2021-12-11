@@ -20,10 +20,9 @@ import SpeechToTextRecorder from "../components/speaker/SpeechToTextRecorder";
 import SelectText from "../components/diverse/SelectText";
 
 import {useState} from "react";
+import {useGeo} from "../hooks/useGeo";
 
 const Home: React.FC = () => {
-  const user = useSelector((state:any) => state.auth.user)
-    const [results, setResults] = useState<string[]>([]);
 
     return (
     <IonPage>
@@ -34,10 +33,6 @@ const Home: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
           {/*<TextToSpeechPlayer size={25} text="Fiesta en la casa de José. Descripción: Fiesta de cumpleaños de jose. Distancia: 1 metro. Tiempo de llegada: 1 minuto" lang="es-US" />*/}
-          {/*<Map />*/}
-
-
-
       </IonContent>
     </IonPage>
   );

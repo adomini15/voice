@@ -9,7 +9,7 @@ const initialState: {
     user: null,
     success: null,
     loading: false,
-    error: null
+    error: undefined
 }
 
 export const authReducer: Reducer = (state = initialState, action) => {
@@ -77,7 +77,7 @@ export const authReducer: Reducer = (state = initialState, action) => {
         }
 
         default: {
-             return 'Not Action Recognized'
+             return { ...state }
         }
     }
 }
