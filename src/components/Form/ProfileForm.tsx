@@ -7,7 +7,6 @@ import Message from "../Message/Message";
 import {authUpdateProfileRequested} from "../../actions/authActions";
 import ChooseImage from "../File/ChooseImage";
 import {Profile} from "../../types/Profile";
-import {convertPathToBlob} from "../../utils/upload/convertPathToBlob";
 
 const initialValues:Profile = {}
 
@@ -72,7 +71,7 @@ const ProfileForm: React.FC<{
                 if (profileError) throw profileError;
 
                 // when success
-                history.push('/home')
+                history.push('/')
 
             } catch (error) {
 

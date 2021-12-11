@@ -11,14 +11,6 @@ export class FirebaseAuthRepository implements AuthRepository {
         this.auth = getAuth(initializeApp(firebaseConfig));
     }
 
-    public getAuthenticatedUser() {
-        try {
-            return this.auth.currentUser;
-        } catch (error) {
-            throw error;
-        }
-    }
-
     public async signin(user:User) {
         const { email, password } = user;
 

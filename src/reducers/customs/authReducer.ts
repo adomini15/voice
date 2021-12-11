@@ -2,11 +2,13 @@ import {Reducer} from "redux";
 
 const initialState: {
     user: any,
+    isAuthenticated: boolean | undefined
     success: any,
     loading: boolean,
     error: any
 } = {
     user: null,
+    isAuthenticated: undefined,
     success: null,
     loading: false,
     error: undefined
@@ -16,16 +18,8 @@ export const authReducer: Reducer = (state = initialState, action) => {
     const { type, payload } = action;
 
     switch (type) {
-        case '@auth-user/requested': {
-            return {...state, loading: true, error: undefined}
-        }
-
-        case '@auth-user/success': {
-            return { ...state, user: action.payload.user, loading: false }
-        }
-
-        case '@auth-user/failed': {
-            return { ...state, error: payload.error, loading: false }
+        case '@auth-user': {
+            return { ...state, user: action.payload.user, isAuthenticated: true }
         }
 
         case '@auth-signup/requested': {
@@ -33,7 +27,7 @@ export const authReducer: Reducer = (state = initialState, action) => {
         }
 
         case '@auth-signup/success': {
-            return { ...state, user: action.payload.user, loading: false, error: null}
+            return { ...state, success: action.payload.success, loading: false, error: null}
         }
 
         case '@auth-signup/failed': {
@@ -45,7 +39,7 @@ export const authReducer: Reducer = (state = initialState, action) => {
         }
 
         case '@auth-sign-in/success': {
-            return { ...state, user: action.payload.user, loading: false, error: null }
+            return { ...state, success: action.payload.success, loading: false, error: null }
         }
 
         case '@auth-sign-in/failed': {
@@ -57,7 +51,7 @@ export const authReducer: Reducer = (state = initialState, action) => {
         }
 
         case '@auth-logout/success': {
-            return {...state, loading: false, error: null}
+            return {...state, success: action.payload.success, user: null, error: undefined, isAuthenticated: false,  loading: false}
         }
 
         case '@auth-logout/failed': {

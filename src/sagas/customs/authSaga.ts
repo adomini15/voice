@@ -9,8 +9,7 @@ import {
     authSignInFailed,
     authSignInSuccess,
     authSignUpFailed,
-    authSignUpSuccess, authUpdateProfileFailed, authUpdateProfileSuccess, authUserFailed,
-    authUserSuccess
+    authSignUpSuccess, authUpdateProfileFailed, authUpdateProfileSuccess,
 } from "../../actions/authActions";
 import {FormatFirebaseError} from "../../utils/errors/FormatFirebaseError";
 import {FirebaseStorageHelper} from "../../utils/upload/FirebaseStorageHelper";
@@ -18,27 +17,12 @@ import {FirebaseStorageHelper} from "../../utils/upload/FirebaseStorageHelper";
 // AuthService launched with specific auth repository
 const authService = AuthService.Instance(new FirebaseAuthRepository())
 
-function* OnGetAuthenticatedUser () : any {
-    try {
-        const feedback = yield call(authService.getAuthenticatedUser)
-
-        yield put(authUserSuccess(feedback));
-    } catch (error: any) {
-        if (error instanceof FirebaseError) {
-            yield put(authUserFailed(FormatFirebaseError[error.code]))
-            return;
-        }
-
-        throw error;
-    }
-}
-
 function* OnSignIn (action:any): any {
     try {
         const {user} = action.payload;
-        const feedback = yield call(authService.signin, user)
+        yield call(authService.signin, user)
 
-        // yield put(authSignInSuccess(feedback));
+        yield put(authSignInSuccess('User authenticated successfully'))
     } catch (error: any) {
         if (error instanceof FirebaseError) {
             yield put(authSignInFailed(FormatFirebaseError[error.code]))
@@ -52,9 +36,8 @@ function* OnSignIn (action:any): any {
 function* OnSignUp(action: any): any {
     try {
         const { user } = action.payload;
-        const feedback = yield call(authService.signup, user);
-
-        // yield put(authSignUpSuccess(feedback))
+        yield call(authService.signup, user);
+        yield put(authSignUpSuccess('User created successfully'))
     } catch (error: any) {
         if(error instanceof FirebaseError) {
             yield put(authSignUpFailed(FormatFirebaseError[error.code]));
@@ -88,7 +71,6 @@ function* OnUpdateProfile (action:any) : any {
 }
 
 export function* watcherAuthSaga() {
-    yield takeEvery('@auth-user/requested', OnGetAuthenticatedUser)
     yield takeEvery('@auth-sign-in/requested', OnSignIn)
     yield takeEvery('@auth-signup/requested', OnSignUp);
     yield takeEvery('@auth-update-profile/requested', OnUpdateProfile)

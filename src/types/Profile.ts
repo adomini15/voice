@@ -1,4 +1,4 @@
 export type Profile = {
-    displayName?: null,
-    photoURL?: null
+    displayName?: string,
+    photoURL?: string
 }

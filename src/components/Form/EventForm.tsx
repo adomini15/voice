@@ -68,7 +68,7 @@ const EventForm: React.FC<{
                 if (eventError) throw eventError;
 
                 // when success
-                history.push('/home')
+                history.push('/')
 
             } catch (error) {
 

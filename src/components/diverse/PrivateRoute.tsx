@@ -1,10 +1,20 @@
 import {useSelector} from "react-redux";
-import Dashboard from "../../pages/Dashboard";
+import {Redirect, Route} from "react-router-dom";
 
-const PrivateRoute:React.FC = () => {
-    const authUser = useSelector((state:any) => state.auth.user);
 
-    return <></>
+const PrivateRoute:React.FC<{
+    path:any,
+    component: any
+}> = (props:any) => {
+    const isAuthenticated = useSelector((state:any) => state.auth.isAuthenticated);
+
+    return <>
+        {isAuthenticated != undefined && (
+            isAuthenticated ? <Route {...props} />
+                : <Redirect to="/signin"/>
+        )}
+
+    </>
 }
 
 export  default PrivateRoute;
