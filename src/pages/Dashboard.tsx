@@ -17,8 +17,6 @@ const Dashboard: React.FC<RouteComponentProps> = ({ match }) => {
 
     {/*<TextToSpeechPlayer size={25} text="Fiesta en la casa de José. Descripción: Fiesta de cumpleaños de jose. Distancia: 1 metro. Tiempo de llegada: 1 minuto" lang="es-US" />*/}
 
-    console.log(match.url);
-
     return (
     <IonPage>
         <IonRouterOutlet>

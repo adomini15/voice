@@ -16,14 +16,6 @@ export class AuthService {
 
         return AuthService._instance;
     }
-    
-    getAuthenticatedUser ()  {
-        try {
-            return AuthService._authRepo.getAuthenticatedUser();
-        } catch (error) {
-            throw error;
-        }
-    }
 
     async signup (user:User) : Promise<any> {
         try {

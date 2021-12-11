@@ -29,15 +29,21 @@ import { onAuthStateChanged } from 'firebase/auth';
 
 import SignIn from "./pages/SignIn";
 import Signup from "./pages/Signup";
-import {authUserRequested} from "./actions/authActions";
+import {authLogoutSuccess, authUser} from "./actions/authActions";
 import {firebaseConfig} from "./.firebaseConfig";
 import Dashboard from "./pages/Dashboard";
+import PrivateRoute from "./components/diverse/PrivateRoute";
+import {eventAllRequest} from "./actions/eventActions";
 
 // when app init
 onAuthStateChanged( getAuth(initializeApp(firebaseConfig)) , (user) => {
-  console.log(user);
 
-  store.dispatch(authUserRequested())
+  if (user) {
+    store.dispatch(authUser(user))
+    store.dispatch(eventAllRequest());
+  } else {
+    store.dispatch(authLogoutSuccess(null))
+  }
 })
 
 const App: React.FC = () => (
@@ -51,7 +57,7 @@ const App: React.FC = () => (
           <Route exact path="/signup" component={Signup} />
 
           {/* private */}
-          <Route path="/dashboard" component={Dashboard}  />
+          <PrivateRoute path="/dashboard" component={Dashboard}  />
           <Route exact path="/">
             <Redirect to="/dashboard" />
           </Route>

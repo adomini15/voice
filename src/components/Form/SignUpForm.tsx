@@ -62,7 +62,7 @@ const SignUpForm: React.FC<{
                 if (signUpError) throw signUpError;
 
                 // when success
-                history.push('/signin')
+                history.push('/')
 
             } catch (error) {
 

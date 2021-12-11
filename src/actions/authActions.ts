@@ -1,21 +1,10 @@
 import {User} from "../types/User";
 
 // auth user actions
-export const authUserRequested = () => ({
-    type: '@auth-user/requested'
-})
-
-export const authUserSuccess = (user: any) => ({
-    type: '@auth-user/success',
+export const authUser = (user: any) => ({
+    type: '@auth-user',
     payload: {
         user
-    }
-})
-
-export const authUserFailed = (error: any) => ({
-    type: '@auth-user/failed',
-    payload: {
-        error
     }
 })
 
@@ -27,10 +16,10 @@ export const authSignUpRequested = (user: User) => ({
     }
 })
 
-export const authSignUpSuccess = (user: any) => ({
+export const authSignUpSuccess = (success: string) => ({
     type: '@auth-signup/success',
     payload: {
-        user
+        success
     }
 })
 
@@ -49,10 +38,10 @@ export const authSignInRequested = (user: User) => ({
     }
 })
 
-export const authSignInSuccess = (user: any) => ({
+export const authSignInSuccess = (success: any) => ({
     type: '@auth-sign-in/success',
     payload: {
-        user
+        success
     }
 })
 
@@ -68,10 +57,10 @@ export const authLogoutRequested = () => ({
     type: '@auth-logout/requested'
 })
 
-export const authLogoutSuccess = (data: any) => ({
+export const authLogoutSuccess = (success: any) => ({
     type: '@auth-logout/success',
     payload: {
-        data
+        success
     }
 })
 

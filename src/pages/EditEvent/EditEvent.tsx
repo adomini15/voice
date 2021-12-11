@@ -25,12 +25,7 @@ const EditEvent: React.FC<RouteComponentProps> = ({ history, match,location }) =
             </IonToolbar>
         </IonHeader>
         <IonContent>
-
-            { event && <EventForm history={history} initialValues={event} eventDispatchAction={eventUpdateRequested}/>}
-
-            {
-                JSON.stringify({id, event})
-            }
+            { event != null && <EventForm history={history} initialValues={event} eventDispatchAction={eventUpdateRequested}/>}
         </IonContent>
     </IonPage>
 }

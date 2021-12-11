@@ -2,11 +2,17 @@ import {useFormik} from "formik";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {IonButton, IonInput, IonItem, IonLabel, IonSpinner} from "@ionic/react";
+import * as yup from "yup"
 
 import Message from "../Message/Message";
 import {User} from "../../types/User";
 import {authSignInRequested} from "../../actions/authActions";
 
+// validation schema
+const validationSchema = yup.object().shape({
+    email: yup.string().required(),
+    password: yup.string().required()
+})
 
 // Form initial values
 const initialValues: User = {
@@ -32,15 +38,18 @@ const SignInForm: React.FC<{
     const {
         values,
         errors,
+        touched,
         setFieldError,
         setSubmitting,
         isSubmitting,
         isValid,
         handleSubmit,
         handleChange,
+        handleBlur
     } = useFormik({
         initialValues,
-        onSubmit
+        onSubmit,
+        validationSchema
     });
 
     // effect occurred when form is submitting
@@ -51,7 +60,7 @@ const SignInForm: React.FC<{
                 if (signInError) throw signInError;
 
                 // when success
-                history.push('/home')
+                history.push('/')
 
             } catch (error) {
 
@@ -78,12 +87,12 @@ const SignInForm: React.FC<{
                       id="email"
                       name="email"
                       onIonChange={handleChange}
+                      onIonBlur={handleBlur}
                       value={values.email}
-
             />
         </IonItem>
         {
-            errors.email &&
+            errors.email && touched.email &&
             <Message message={errors.email!} color="danger" />
         }
 
@@ -93,12 +102,13 @@ const SignInForm: React.FC<{
                       id="password"
                       name="password"
                       onIonChange={handleChange}
+                      onIonBlur={handleBlur}
                       value={values.password}
             />
 
         </IonItem>
         {
-            errors.password &&
+            errors.password && touched.password &&
             <Message message={errors.password!} color="danger" />
         }
 

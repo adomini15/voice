@@ -1,6 +1,6 @@
 // external
 import { initializeApp } from "firebase/app"
-import { getFirestore, collection, doc, getDocs, addDoc, getDoc, updateDoc } from  "firebase/firestore"
+import { getFirestore, collection, doc, getDocs, addDoc, getDoc, updateDoc} from  "firebase/firestore"
 
 // internal
 import {EventRepository} from "./EventRepository";

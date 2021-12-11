@@ -21,7 +21,7 @@ export const eventReducer:Reducer = (state = initialState, action) => {
         }
 
         case '@event-all/success': {
-            return { ...state, events: action.payload.events,  loading: false, error: null }
+            return { ...state, events: action.payload.events,  loading: false }
         }
 
         case '@event-all/failed': {
