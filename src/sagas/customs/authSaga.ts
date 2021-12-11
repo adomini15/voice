@@ -38,7 +38,7 @@ function* OnSignIn (action:any): any {
         const {user} = action.payload;
         const feedback = yield call(authService.signin, user)
 
-        yield put(authSignInSuccess(feedback));
+        // yield put(authSignInSuccess(feedback));
     } catch (error: any) {
         if (error instanceof FirebaseError) {
             yield put(authSignInFailed(FormatFirebaseError[error.code]))
@@ -54,7 +54,7 @@ function* OnSignUp(action: any): any {
         const { user } = action.payload;
         const feedback = yield call(authService.signup, user);
 
-        yield put(authSignUpSuccess(feedback))
+        // yield put(authSignUpSuccess(feedback))
     } catch (error: any) {
         if(error instanceof FirebaseError) {
             yield put(authSignUpFailed(FormatFirebaseError[error.code]));
