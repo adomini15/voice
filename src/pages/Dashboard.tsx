@@ -1,9 +1,12 @@
 // external
 import {
-    IonPage, IonRouterOutlet,
+    IonFooter, IonIcon, IonLabel,
+    IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs,
 } from '@ionic/react';
 import {Redirect, Route} from "react-router-dom";
 import { RouteComponentProps } from "react-router"
+// icons
+import { personCircleOutline as profile, settingsOutline as settings, calendarOutline as events } from "ionicons/icons"
 
 // internal
 import './Dashboard.css';
@@ -15,21 +18,38 @@ import Settings from "./Settings/Settings";
 
 const Dashboard: React.FC<RouteComponentProps> = ({ match }) => {
 
-    {/*<TextToSpeechPlayer size={25} text="Fiesta en la casa de José. Descripción: Fiesta de cumpleaños de jose. Distancia: 1 metro. Tiempo de llegada: 1 minuto" lang="es-US" />*/}
-
     return (
-    <IonPage>
-        <IonRouterOutlet>
-            <Route exact path={`${match.url}/events`} component={Events} />
-            <Route exact path={`${match.url}/profile`} component={Profile} />
-            <Route exact path={`${match.url}/events/create`} component={CreateEvent} />
-            <Route exact path={`${match.url}/settings`} component={Settings} />
-            <Route path={`${match.url}/events/:id/edit`} component={EditEvent} />
-            <Route exact path={ match.url } >
-                <Redirect to={`${match.url}/events`} />
-            </Route>
-        </IonRouterOutlet>
-    </IonPage>
+    <IonTabs>
+
+            <IonRouterOutlet>
+                <Route exact path={`${match.url}/events`} component={Events} />
+                <Route exact path={`${match.url}/profile`} component={Profile} />
+                <Route exact path={`${match.url}/events/create`} component={CreateEvent} />
+                <Route exact path={`${match.url}/settings`} component={Settings} />
+                <Route path={`${match.url}/events/:id/edit`} component={EditEvent} />
+                <Route exact path={ match.url } >
+                    <Redirect to={`${match.url}/events`} />
+                </Route>
+            </IonRouterOutlet>
+
+            <IonTabBar slot="bottom" >
+                <IonTabButton tab="profile" href={`${match.url}/profile`}>
+                    <IonIcon icon={profile} />
+                    <IonLabel>Profile</IonLabel>
+                </IonTabButton>
+
+                <IonTabButton tab="events" href={`${match.url}/events`}>
+                    <IonIcon icon={events} />
+                    <IonLabel>Events</IonLabel>
+                </IonTabButton>
+
+                <IonTabButton tab="settings" href={`${match.url}/settings`}>
+                    <IonIcon icon={settings} />
+                    <IonLabel>Settings</IonLabel>
+                </IonTabButton>
+            </IonTabBar>
+
+    </IonTabs>
   );
 };
 

@@ -68,7 +68,7 @@ const EventForm: React.FC<{
                 if (eventError) throw eventError;
 
                 // when success
-                history.push('/')
+                // history.push('/')
 
             } catch (error) {
 
@@ -139,9 +139,6 @@ const EventForm: React.FC<{
             <IonButton type="submit" expand="full" disabled={!isValid || isSubmitting}>{ loading ? <IonSpinner name="crescent"/> : 'Submit'}</IonButton>
         </div>
 
-        {
-            JSON.stringify(values)
-        }
     </form>
 }
 
