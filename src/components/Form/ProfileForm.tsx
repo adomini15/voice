@@ -19,6 +19,7 @@ const ProfileForm: React.FC<{
     const authUser = useSelector((state:any) => state.auth.user)
     const profileError = useSelector((state:any) => state.auth.error );
     const loading = useSelector((state:any) => state.auth.loading);
+    const [loadingPhoto, setLoadingPhoto] = useState(false);
 
     // local state
     const [capturedPhoto, setCapturedPhoto] = useState<Blob>()
@@ -98,9 +99,11 @@ const ProfileForm: React.FC<{
 
         <IonItem>
             <IonAvatar slot="start">
-                <img src={values.photoURL!} />
+                {
+                    loadingPhoto ? <IonSpinner name="crescent"/> :  <img src={values.photoURL} />
+                }
             </IonAvatar>
-            <ChooseImage onChange={onCapturePhoto} />
+            <ChooseImage onChange={onCapturePhoto} onLoading={(loadingPhoto:boolean) => setLoadingPhoto(loadingPhoto)} />
         </IonItem>
         {
             errors.photoURL &&

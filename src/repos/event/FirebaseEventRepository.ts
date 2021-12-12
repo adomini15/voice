@@ -1,6 +1,6 @@
 // external
 import { initializeApp } from "firebase/app"
-import { getFirestore, collection, doc, getDocs, addDoc, getDoc, updateDoc} from  "firebase/firestore"
+import { getFirestore, collection, doc, getDocs,  getDoc, addDoc, updateDoc, deleteDoc} from  "firebase/firestore"
 
 // internal
 import {EventRepository} from "./EventRepository";
@@ -83,10 +83,13 @@ export class FirebaseEventRepository implements EventRepository{
         }
     }
 
-    async delete(id: number): Promise<number> {
+    async delete(id: string): Promise<string> {
         try {
+            const docRef = await doc(this.eventCollection, id);
 
-            return 0;
+            await deleteDoc(docRef)
+
+            return id;
         } catch (error) {
             throw error;
         }

@@ -4,5 +4,5 @@ export interface EventRepository {
     getAll() : Promise<TEvent[]>
     create(event: TEvent) : Promise<TEvent>;
     update(event: TEvent) : Promise<TEvent>;
-    delete(id: number) : Promise<number>;
+    delete(id: string) : Promise<string>;
 }

@@ -19,7 +19,7 @@ const TextToSpeechPlayer:React.FC<{
         height: `${size}px`
     }
 
-    const { Speak, Stop, isStopped } = useTextToSpeech('es-US');
+    const { Speak, Stop, isStopped } = useTextToSpeech(lang);
 
     // when component be mounted and unmounted
     useEffect(() => {

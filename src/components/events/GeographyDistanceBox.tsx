@@ -1,51 +1,34 @@
 import {IonItem, IonLabel, IonNote, IonThumbnail} from "@ionic/react";
 import place from "../../Place.png";
-import {Coordinates} from "../../types/Coordinates";
-import {useDistance} from "../../hooks/useDistance";
-import {useEffect} from "react";
 
 const GeographyDistanceBox: React.FC<{
-    origin: Coordinates,
-    destination: Coordinates
-}> = ({ origin, destination }) => {
+    distance: string,
+    duration: string
+}> = ({ distance, duration }) => {
 
-    // hooks
-    const {distanceInformation, takeDistanceInformation} = useDistance();
-
-    // when component be mounted
-    useEffect(() => {
-
-        (async function() {
-            await takeDistanceInformation(origin, destination);
-        })()
-
-    }, []);
-
-
-    return <>
-        {distanceInformation && (<IonItem className="ion-padding-bottom">
-            <IonThumbnail slot="start">
+    return <IonItem className="ion-padding-bottom" >
+            <IonThumbnail slot="start" >
                 <img src={place}/>
             </IonThumbnail>
-            <div className="ion-padding">
+            <div className="ion-padding" >
                 <div>
-                    <IonLabel color="primary" style={{padding: "0.75em 0", fontSize: "0.875rem", fontWeight: 'bold'}}>
+                    <IonLabel color="dark" style={{padding: "0.75em 0", fontSize: "0.875rem", fontWeight: 'bold'}}>
                         Distancia
                     </IonLabel>
                     <IonNote>
-                        {distanceInformation.distance}
+                        {distance}
                     </IonNote>
 
-                    <IonLabel color="primary" style={{padding: "0.75em 0", fontSize: "0.875rem", fontWeight: 'bold'}}>
-                        Tiempo de llegada
+                    <IonLabel color="dark" style={{padding: "0.75em 0", fontSize: "0.875rem", fontWeight: 'bold'}}>
+                        Duración
                     </IonLabel>
                     <IonNote>
-                        {distanceInformation.duration}
+                        {duration}
                     </IonNote>
                 </div>
             </div>
-    </IonItem>)}
-    </>
+    </IonItem>
+
 }
 
 export default GeographyDistanceBox;

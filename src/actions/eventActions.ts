@@ -64,7 +64,7 @@ export const eventUpdateFailed = (error: any) => ({
 })
 
 // event delete action
-export const eventDeleteRequested  = (id:any) => ({
+export const eventDeleteRequested  = (id:string) => ({
     type: '@event-delete/requested',
     payload: {
         id

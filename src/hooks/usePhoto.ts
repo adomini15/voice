@@ -1,23 +1,40 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 // Capacitor Camera
-import { Camera } from "@capacitor/camera"
+import {Camera, CameraResultType, CameraSource} from "@capacitor/camera"
 import {convertPathToBlob} from "../utils/upload/convertPathToBlob";
 
 export const usePhoto = () => {
     const [photo, setPhoto] = useState<Blob>();
+    const [loadingPhoto, setLoadingPhoto] = useState(false);
 
     const takePhoto = async () =>{
-        const camera = await Camera.pickImages({
-            limit: 1,
-            quality: 90
-        });
+        try {
+            setLoadingPhoto(true)
+            const camera = await Camera.getPhoto({
+                quality: 200,
+                resultType: CameraResultType.Uri,
+                source: CameraSource.Photos,
+            });
 
-        const imageBlob = await convertPathToBlob(camera.photos[0].webPath);
-        setPhoto(imageBlob)
+            console.log('hey')
+
+            if (camera.webPath) {
+                const imageBlob = await convertPathToBlob(camera.webPath);
+                setPhoto(imageBlob)
+                return
+            }
+
+            throw 'Image Not Selected'
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoadingPhoto(false)
+        }
     }
 
     return {
         photo,
         takePhoto,
+        loadingPhoto
     }
 }

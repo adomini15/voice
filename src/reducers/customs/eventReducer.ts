@@ -65,7 +65,7 @@ export const eventReducer:Reducer = (state = initialState, action) => {
 
         case '@event-delete/success': {
             const events: TEvent[] = state.events.filter((event:TEvent) => (
-                event.id != action.payload.event.id
+                event.id != action.payload.id
             ))
 
             return { ...state, events , error: null, loading: false }

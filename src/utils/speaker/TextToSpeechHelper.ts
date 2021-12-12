@@ -8,10 +8,10 @@ export class TextToSpeechHelper {
            await TextToSpeech.speak({
                text,
                lang,
-               rate: 1.0,
+               rate: 1,
                pitch: 1.0,
                volume: 1.0,
-               category: 'ambient'
+               category: 'ambient',
            });
        } catch (error) {
            throw error;

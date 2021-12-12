@@ -1,3 +1,4 @@
+// external
 import {
     IonBadge,
     IonCard,
@@ -5,68 +6,158 @@ import {
     IonCardHeader,
     IonCardSubtitle,
     IonCardTitle,
-    IonLabel, IonButton, IonIcon
+    IonLabel, IonButton, IonIcon, IonSpinner, IonAlert
 } from "@ionic/react";
-import { useHistory, useRouteMatch } from "react-router"
+import { useHistory, useRouteMatch } from "react-router";
+import {useEffect, useState} from "react";
 
-import { trash as del, pencil as edit } from "ionicons/icons"
+// icons
+import { trash as del, pencil as edit } from "ionicons/icons";
+
+// internal
 import {TEvent} from "../../types/TEvent";
-import {useState} from "react";
 import "./EventListItem.css"
 import GeographyDistanceBox from "./GeographyDistanceBox";
 import {Coordinates} from "../../types/Coordinates";
+import TextToSpeechPlayer from "../speaker/TextToSpeechPlayer";
+import {DistanceInformation} from "../../types/DistanceInformation";
+import {GoogleMapsHelper} from "../../utils/geo/GoogleMapsHelper";
 
-const passedStyles = {
-    backgroundColor: "hsl(34deg 59% 90%)"
-}
+// momentjs
+import moment from "moment";
+import 'moment/locale/es';
+import {useDispatch} from "react-redux";
+import {eventDeleteRequested} from "../../actions/eventActions";
+
 
 const EventListItem: React.FC<{
     event: TEvent,
     userLocation: Coordinates
-}> = ({ event, userLocation }) => {
+}> = ({ event, userLocation}) => {
+    // transforming event
+    const formatArrivalTime = moment(event.arrival_time).fromNow();
+    const diffInMinutes = moment(event.arrival_time).diff(moment(new Date()), "minutes");
+    let status:any;
+
+    if(diffInMinutes > 1440) {
+        status = {
+            toSpeech: "en progreso",
+            toStatusBadge: "En progreso",
+            color: "dark"
+        }
+    } else if(diffInMinutes < 0 ) {
+        status = {
+            toSpeech: "olvidado",
+            toStatusBadge: "Olvidado",
+            color: "danger"
+        };
+    } else {
+        status = {
+            toSpeech: "para hoy",
+            toStatusBadge: "Hoy",
+            color: "primary"
+        };
+    }
+
+    const dispatch = useDispatch();
 
     // hooks
     const history = useHistory();
     const match = useRouteMatch();
 
     // local states
-    const [ status, setStatus ] = useState();
+    const [textToSpeechEntry, setTextToSpeechEntry] = useState<string | null>(null);
+    const [distanceInfo, setDistanceInfo ] = useState<DistanceInformation>()
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [eliminationStatus, setEliminationStatus] = useState(false);
+
+    useEffect(() => {
+        (async function () {
+           if (distanceInfo) {
+               setTextToSpeechEntry(`Evento ${status.toSpeech}: ${event.title}. Realizado ${formatArrivalTime}, a ${distanceInfo.distance} o ${distanceInfo.duration} de distancia.`)
+           } else {
+               setDistanceInfo(await GoogleMapsHelper.getDistance( userLocation, event.coordinates))
+           }
+        })()
+    }, [distanceInfo]);
 
     // handlers
     const navigateToEdit = () => {
         history.push(`${match.url}/${event.id}/edit`)
     }
 
-    const onDelete = () => {
-
+    const onDelete = (id:string) => {
+        dispatch(eventDeleteRequested(id))
     }
 
     return <IonCard>
-        <IonCardHeader>
-            <IonCardTitle>
-                <div>
-                    <IonLabel className="ion-margin-end">{ event.title }</IonLabel>
-                    <IonBadge color="danger" slot="end" style={{ fontSize: "0.5em" }}>Passed</IonBadge>
-                </div>
-            </IonCardTitle>
-            <IonCardSubtitle>
-                { event.arrival_time }
-            </IonCardSubtitle>
+        <IonCardHeader className="ion-justify-content-between" style={{ display: 'flex', gap: "2rem" }} >
+            <div>
+                <IonCardTitle className="ion-margin-bottom">
+                    <div>
+                        <IonLabel className="ion-margin-end">{ event.title }</IonLabel>
+                        <IonBadge color={status.color} slot="end" style={{ fontSize: "0.5em" }}>{status.toStatusBadge}</IonBadge>
+                    </div>
+                </IonCardTitle>
+                <IonCardSubtitle>
+                    <div>
+                        <b>Realizado: </b>{ formatArrivalTime }
+                    </div>
+                </IonCardSubtitle>
+            </div>
+            <div>
+                {   textToSpeechEntry ?
+                    <TextToSpeechPlayer text={textToSpeechEntry} lang="es-US" size={25} /> :
+                    <IonSpinner name="crescent" />
+                }
+            </div>
         </IonCardHeader>
 
         <IonCardContent>
-            <GeographyDistanceBox origin={userLocation} destination={event.coordinates} />
+            {
+                distanceInfo ?
+                <GeographyDistanceBox distance={ String(distanceInfo.distance) } duration={ String(distanceInfo.duration) }  /> :
+                    <IonSpinner name="crescent" />
+            }
             <p style={{ fontSize: "0.875rem" }}>
-                { event.description }
+                <p className="ion-padding-bottom"><b>Descripción:</b></p>{ event.description }
             </p>
             <div className="ion-padding-top">
                 <IonButton color="dark" fill="solid" expand="full" onClick={navigateToEdit} >
                     <IonIcon icon={edit} />
                 </IonButton>
-                <IonButton color="danger" fill="solid" expand="full">
+                <IonButton color="dark" fill="outline" expand="full" onClick={() => setShowDeleteConfirm(true)}>
                     <IonIcon icon={del} />
                 </IonButton>
             </div>
+
+            {/* when confirm a event elimination */}
+            <IonAlert
+                isOpen={showDeleteConfirm}
+                onDidDismiss={() => setShowDeleteConfirm(false)}
+                header={'Confirm'}
+                subHeader={`"${event.title}"`}
+                message={'Are you sure to delete this event?'}
+                buttons={[{
+                    text: 'Cancel',
+                    role: 'cancel',
+                }, {
+                    text: 'Delete',
+                    role: 'delete',
+                    handler: () => {
+                        onDelete(event.id!)
+                        setEliminationStatus(true);
+                    }
+                }]}
+            />
+
+            {/* when a event was deleted  */}
+            <IonAlert
+                isOpen={eliminationStatus}
+                onDidDismiss={() => setEliminationStatus(false)}
+                header={'Event deleted successfully'}
+                buttons={['OK']}
+            />
         </IonCardContent>
     </IonCard>
 }

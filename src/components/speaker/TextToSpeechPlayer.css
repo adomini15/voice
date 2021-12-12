@@ -5,11 +5,11 @@
 .text-to-speech-player button {
     border-radius: 100%;
     padding: 0.5rem;
-    background-color: var(--ion-color-warning-shade);
+    background-color:transparent;
     display: inline-block;
 }
 
 .text-to-speech-player button.active {
-
+    background-color: #cccccc;
 }
 
