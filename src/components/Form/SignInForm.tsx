@@ -60,7 +60,7 @@ const SignInForm: React.FC<{
                 if (signInError) throw signInError;
 
                 // when success
-                // history.push('/')
+                history.push('/')
 
             } catch (error) {
 
