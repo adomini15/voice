@@ -1,12 +1,25 @@
-import {Coordinates} from "../../types/Coordinates";
+// external
+import { Loader } from "@googlemaps/js-api-loader"
 
+// internal
+import {Coordinates} from "../../types/Coordinates";
+import {DistanceInformation} from "../../types/DistanceInformation";
+import {googleMapsConfig} from "../../.googleMapsConfig";
+
+const loader = new Loader({
+    apiKey: googleMapsConfig.API_KEY,
+    libraries: ["places"]
+})
 
 export class GoogleMapsHelper {
-
     private constructor() {}
 
-    static async getDistance(origin: Coordinates, destination: Coordinates, travelMode: google.maps.TravelMode = google.maps.TravelMode.DRIVING) {
+    static async getDistance(origin: Coordinates, destination: Coordinates)
+        : Promise<DistanceInformation> {
+
         try {
+            const google = await loader.load();
+
             const distanceMService = new google.maps.DistanceMatrixService()
 
             const feedback = await distanceMService.getDistanceMatrix({
@@ -25,6 +38,14 @@ export class GoogleMapsHelper {
                 duration: feedback.rows[0].elements[0].duration.text,
                 distance: feedback.rows[0].elements[0].distance.text
             }
+
+            //
+            // return  {
+            //     distance: '2',
+            //     duration: '2',
+            //     destinationAddress: '',
+            //     originAddress: ''
+            // }
 
         } catch (error) {
             throw error;

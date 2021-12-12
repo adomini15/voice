@@ -1,5 +1,5 @@
 // external
-import {IonContent, IonHeader, IonPage, IonTitle, IonToolbar} from "@ionic/react";
+import {IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar} from "@ionic/react";
 import { RouteComponentProps } from "react-router"
 import {useSelector} from "react-redux";
 
@@ -19,6 +19,9 @@ const EditEvent: React.FC<RouteComponentProps> = ({ history, match,location }) =
     return <IonPage>
         <IonHeader>
             <IonToolbar>
+                <IonButtons slot="start">
+                    <IonBackButton defaultHref="/"></IonBackButton>
+                </IonButtons>
                 <IonTitle>
                     Edit Event
                 </IonTitle>

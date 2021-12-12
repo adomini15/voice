@@ -1,5 +1,5 @@
 // external
-import {IonContent, IonHeader, IonPage, IonTitle, IonToolbar} from "@ionic/react";
+import {IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons} from "@ionic/react";
 import { RouteComponentProps } from "react-router"
 // internal
 import EventForm from "../../components/Form/EventForm";
@@ -59,6 +59,9 @@ const CreateEvent: React.FC<RouteComponentProps> = ({ history, match, location }
     return <IonPage>
         <IonHeader>
             <IonToolbar>
+                <IonButtons slot="start">
+                    <IonBackButton defaultHref="/"></IonBackButton>
+                </IonButtons>
                 <IonTitle>Create Event</IonTitle>
             </IonToolbar>
         </IonHeader>
