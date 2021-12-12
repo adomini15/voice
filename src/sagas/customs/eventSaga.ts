@@ -8,7 +8,7 @@ import {
     eventAllFailed,
     eventAllSuccess,
     eventCreateFailed,
-    eventCreateSuccess, eventUpdateFailed,
+    eventCreateSuccess, eventDeleteFailed, eventDeleteSuccess, eventUpdateFailed,
     eventUpdateSuccess
 } from "../../actions/eventActions";
 import {EventService} from "../../services/EventService";
@@ -70,9 +70,27 @@ function* OnUpdateEvent (action: any) : any {
     }
 }
 
+function* OnDeleteEvent (action:any) : any {
+    try {
+        const deletedEvent: string = action.payload.id;
+
+        const feedback:string = yield call(eventService.delete, deletedEvent);
+
+        yield put(eventDeleteSuccess(feedback))
+    } catch (error) {
+        if (error instanceof FirebaseError) {
+            yield put(eventDeleteFailed(FormatFirebaseError[error.code]))
+            return;
+        }
+
+        throw error;
+    }
+}
+
 export function*  watcherEventSaga() {
     yield takeEvery('@event-create/requested', OnCreateEvent);
     yield takeEvery('@event-all/requested', OnAllEvent);
     yield takeEvery('@event-update/requested', OnUpdateEvent)
+    yield takeEvery('@event-delete/requested', OnDeleteEvent)
 }
 

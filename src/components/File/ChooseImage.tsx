@@ -7,15 +7,20 @@ import { imageOutline } from "ionicons/icons"
 
 
 const ChooseImage: React.FC<{
-    onChange: Function
-}> = ({ onChange }) => {
-    const { photo, takePhoto } = usePhoto();
+    onChange: Function,
+    onLoading: Function
+}> = ({ onChange, onLoading }) => {
+    const { photo, takePhoto, loadingPhoto } = usePhoto();
 
     useEffect(() => {
         if(photo) {
             onChange(photo);
         }
     }, [photo]);
+
+    useEffect(() => {
+        onLoading(loadingPhoto)
+    }, [loadingPhoto])
 
     return <div className="ion-padding">
         <IonButton fill="outline"  size="small" onClick={takePhoto}>

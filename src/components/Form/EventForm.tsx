@@ -130,6 +130,7 @@ const EventForm: React.FC<{
             <IonDatetime placeholder="Arrival Time"
                          id="arrival_time"
                          name="arrival_time"
+                         displayFormat="DD-MM-YYYY h:mm a"
                          onIonChange={handleChange}
                          onIonBlur={handleBlur}
                          value={ values.arrival_time }

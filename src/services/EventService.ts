@@ -40,7 +40,7 @@ export class EventService {
         }
     }
 
-    async delete(id:number) {
+    async delete(id:string) {
         try {
            return  await EventService._eventRepo.delete(id);
         } catch (error) {
