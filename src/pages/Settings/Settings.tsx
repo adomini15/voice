@@ -9,7 +9,6 @@ import { exit } from "ionicons/icons"
 import {authLogoutRequested} from "../../actions/authActions";
 import {useState} from "react";
 
-
 const Settings: React.FC = () => {
     const dispatch = useDispatch();
 
