@@ -17,7 +17,7 @@ import { trash as del, pencil as edit } from "ionicons/icons";
 // internal
 import {TEvent} from "../../types/TEvent";
 import "./EventListItem.css"
-import GeographyDistanceBox from "./GeographyDistanceBox";
+import GeographyDistanceBox from "../diverse/GeographyDistanceBox";
 import {Coordinates} from "../../types/Coordinates";
 import TextToSpeechPlayer from "../speaker/TextToSpeechPlayer";
 import {DistanceInformation} from "../../types/DistanceInformation";
@@ -28,6 +28,8 @@ import moment from "moment";
 import 'moment/locale/es';
 import {useDispatch} from "react-redux";
 import {eventDeleteRequested} from "../../actions/eventActions";
+import WeatherWidget from "../diverse/WeatherWidget";
+import {useWeather} from "../../hooks/useWeather";
 
 
 const EventListItem: React.FC<{
@@ -38,6 +40,7 @@ const EventListItem: React.FC<{
     const formatArrivalTime = moment(event.arrival_time).fromNow();
     const diffInMinutes = moment(event.arrival_time).diff(moment(new Date()), "minutes");
     let status:any;
+
 
     if(diffInMinutes > 1440) {
         status = {
@@ -64,12 +67,21 @@ const EventListItem: React.FC<{
     // hooks
     const history = useHistory();
     const match = useRouteMatch();
+    const { weather, takeWeather } = useWeather();
 
     // local states
     const [textToSpeechEntry, setTextToSpeechEntry] = useState<string | null>(null);
     const [distanceInfo, setDistanceInfo ] = useState<DistanceInformation>()
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [eliminationStatus, setEliminationStatus] = useState(false);
+
+    // when component be mounted
+    useEffect(() => {
+        (async function () {
+            await takeWeather(userLocation)
+        })();
+
+    }, []);
 
     useEffect(() => {
         (async function () {
@@ -119,6 +131,13 @@ const EventListItem: React.FC<{
                 <GeographyDistanceBox distance={ String(distanceInfo.distance) } duration={ String(distanceInfo.duration) }  /> :
                     <IonSpinner name="crescent" />
             }
+
+            {
+                status.toStatusBadge.toLowerCase().includes('hoy') && (
+                    weather ? <WeatherWidget weather={weather} /> : <IonSpinner name="crescent" />
+                )
+            }
+
             <p style={{ fontSize: "0.875rem" }}>
                 <p className="ion-padding-bottom"><b>Descripción:</b></p>{ event.description }
             </p>

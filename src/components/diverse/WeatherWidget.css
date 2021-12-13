@@ -1,0 +1,40 @@
+.WeatherWidget {
+    background-color: #f5f5f5;
+    margin: 1rem;
+}
+
+.WeatherWidget header {
+    background-color: #ebebeb;
+    padding: 0.5rem 1rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.WeatherWidget section {
+    padding: 0.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.WeatherWidget .tag {
+    font-size: 0.75rem;
+}
+
+.WeatherWidget .tags {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.WeatherWidget .weather-icon {
+    height: 30px;
+}
+
+.WeatherWidget .description {
+    font-weight: 600;
+    padding: 0.25em 1em;
+    text-transform: uppercase;
+    color: var(--ion-color-medium);
+}
+
