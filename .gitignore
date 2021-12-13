@@ -32,6 +32,7 @@ yarn-error.log*
 
 .firebaseConfig.ts
 .googleMapsConfig.ts
+.openWeatherConfig.ts
 settings.gradle.kts
 
 # Ignore Gradle build output directory

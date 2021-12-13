@@ -18,7 +18,6 @@ const EventList: React.FC<{
         })()
     }, []);
 
-
     return <div>
         { (coordinates && events?.map((event, index:number) => (
                 <EventListItem event={event} userLocation={coordinates} key={index} />
