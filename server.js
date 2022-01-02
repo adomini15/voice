@@ -15,7 +15,7 @@ app.use(function (req,res) {
 })
 
 app.use(express.static('build'))
-app.set('port', proccess.env.PORT || 5000);
+app.set('port', process.env.PORT || 5000);
 app.listen(app.get('port'), () => {
     console.log('Express server listening on port', app.get('port'));
 })
