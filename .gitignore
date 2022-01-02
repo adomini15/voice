@@ -33,6 +33,8 @@ yarn-error.log*
 # .firebaseConfig.ts
 # .googleMapsConfig.ts
 # .openWeatherConfig.ts
+serve.js
+herokuDeployment.sh
 settings.gradle.kts
 
 # Ignore Gradle build output directory
